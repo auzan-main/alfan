@@ -15,7 +15,7 @@
 
 #define TxDir 6
 #define RxDir 3
-//aku
+
 //_RIGHT FEET_//
 #define KANAN1 180 //badan :
 #define KANAN2 180 //178+kebelakang -kedepan
