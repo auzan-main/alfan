@@ -5500,10 +5500,7 @@ void terbangLintangCaseD() {
   //   transmitPulsaXL();
   waitAll(800);
 }
-void terbangLintangCaseE() {
-  int ak = 3.8, ku = 380;
 
-}
 void terbangLintang() {
   //mundurin badan
   tjKa = 5; //+ badan kebelakang
@@ -7393,28 +7390,4 @@ void transisiKiriBawah(int t) {
   dynamixel(2, 41, KEPALA41 + 15, t); //+mundur,-maju
   dynamixel(2, 42, KEPALA42, t); //+turun,-angkall
   dynamixel(2, 43, KEPALA43 + 15, t); //+KANAN,-KIRI
-}
-
-void masker( byte ID, int posisi) {
-  uint16_t crc_accum = 0;
-  uint16_t CRC;
-  unsigned char CRC_L = 0;
-  unsigned char CRC_H = 0;
-  uint16_t data_blk_size = 14;//size of TxPacket
-
-
-  uint16_t goalPos = posisi * 1024 / 300;
-
-  uint8_t goalPos_L, goalPos_H;
-  goalPos_H = goalPos >> 8;
-  goalPos_L = goalPos - (goalPos_H << 8);
-  unsigned char TxPacket2[14] = { 0xFF, 0xFF, 0xFD, 0x00, ID , 0x07, 0x00, 0x03, 0x1E, 0x00, goalPos_L, goalPos_H, CRC_L, CRC_H };
-  CRC = update_crc(0, TxPacket2, 12);
-  CRC_L = (CRC & 0x00FF);
-  CRC_H = (CRC >> 8) & 0x00FF;
-  TxPacket2[12] = CRC_L;
-  TxPacket2[13] = CRC_H;
-
-  Serial2.write(TxPacket2, 14);
-  return;
 }

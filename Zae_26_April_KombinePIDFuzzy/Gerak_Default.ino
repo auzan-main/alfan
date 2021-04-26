@@ -1,4 +1,4 @@
-void posisiDefault()
+void posisiDefault(void)
 {
   defaultTangan(20);
   defaultKaki();
