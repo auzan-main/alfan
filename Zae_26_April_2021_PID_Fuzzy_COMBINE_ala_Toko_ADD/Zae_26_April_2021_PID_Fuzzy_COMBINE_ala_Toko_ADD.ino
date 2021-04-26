@@ -225,7 +225,7 @@ void loop() {
 //  walkTestingPID(); //periode jalan 2
 //  Serial.println("Bodoh");
   bacaBNOAwal();
-  delay(2000);
+  delay(3000);
 //walkTestingPID_FASTER(); //periode jalan 1.5
 
 }
