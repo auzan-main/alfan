@@ -1,9 +1,3 @@
-/*Keterangan Himpunan Fuzzy
- * Input : Pitch, Roll
- * Himpunan : 3, rendah, sedang, ekstrim
- * Rules : masing-masing himpunan 3 kondisi
- * Output : 3, kp, ki, kd
- */
 #include <Fuzzy.h>
 
 // Instantiating a Fuzzy object
@@ -18,7 +12,7 @@ void setupFuzzy()
   // Instantiating a FuzzyInput object
   FuzzyInput *pitch = new FuzzyInput(1);
   // Instantiating a FuzzySet object
-  FuzzySet *rendah = new FuzzySet(0, 0, 2, 6);
+  FuzzySet *rendah = new FuzzySet(0, 0, 4, 6);
   // Including the FuzzySet into FuzzyInput
   pitch->addFuzzySet(rendah);
   // Instantiating a FuzzySet object
