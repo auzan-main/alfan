@@ -18,7 +18,7 @@ void setupFuzzy()
   // Instantiating a FuzzyInput object
   FuzzyInput *pitch = new FuzzyInput(1);
   // Instantiating a FuzzySet object
-  FuzzySet *rendah = new FuzzySet(0, 0, 4, 6);
+  FuzzySet *rendah = new FuzzySet(0, 0, 2, 6);
   // Including the FuzzySet into FuzzyInput
   pitch->addFuzzySet(rendah);
   // Instantiating a FuzzySet object
