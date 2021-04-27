@@ -45,7 +45,7 @@ void transmitJuna() {
 
 void StartZae() {
   digitalWrite(16, HIGH);
-  int lastMove, wkt, prevMove;
+  unsigned int wkt, prevMove;
 
   //Sebelum musik mulai
   while (cekSuara == 0) {

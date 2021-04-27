@@ -377,6 +377,7 @@ float calculateFuzzy(int tipe, int input, int address)
   //  int input1=0;
   //  input = kp_pitch_fuzzy;
   //  input1 = kp_roll_fuzzy;
+//  Serial.print("tipe :");Serial.println(tipe);
   fuzzy->setInput(tipe, input);
   //  fuzzy->setInput(1, input);
   //  fuzzy->setInput(2, input);

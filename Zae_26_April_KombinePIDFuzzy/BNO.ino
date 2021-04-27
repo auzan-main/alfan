@@ -11,7 +11,7 @@ float presErrorRoll, presPosRoll, prevErrRoll = 0;
 float presPosYaw;
 float errorAccumPitch, errorAccumRoll = 0;                   //buat integrator
 float dErr = 0;                                                  //buat differentiator
-float nextGoalPitch, nextGoalRoll_Kanan ,nextGoalRoll_Kiri = 0;
+float nextGoalPitch, nextGoalRoll_Kanan , nextGoalRoll_Kiri = 0;
 float defaultBNO_Pitch, defaultBNO_Roll, defaultBNO_Yaw = 0;
 long int prevRead, timeNow = 0;
 
@@ -36,9 +36,9 @@ float Kp_Roll_Kiri = 0 , Ki_Roll_Kiri = 0, Kd_Roll_Kiri = 0;
 //float Kp_Roll_Kiri = 0.15 , Ki_Roll_Kiri = 0.2, Kd_Roll_Kiri = 0.2; //error rendah
 
 /*
- * untuk ROll error rendah untuk error < 10 derajat. Error sedang untuk 10 < error < 15. Error ekstrim untuk error > 15.
- * untuk PITCH error rendah untuk error < 5 derajat. Error sedang untuk 5 < error < 10. Error ekstrim untuk error > 10.
- */
+   untuk ROll error rendah untuk error < 10 derajat. Error sedang untuk 10 < error < 15. Error ekstrim untuk error > 15.
+   untuk PITCH error rendah untuk error < 5 derajat. Error sedang untuk 5 < error < 10. Error ekstrim untuk error > 10.
+*/
 
 ////////////ini buat FASTER walk periode 1.5///////////////////
 
@@ -84,8 +84,8 @@ void bacaBNOAwal() {
   presPosYaw = euler.x();
   timeNow = millis();
 
-//  Serial.print(" Pitch: "); Serial.print(presPosPitch); Serial.print("\t\t");
-//  Serial.print(" Roll : "); Serial.print(presPosRoll); Serial.println("\t\t");
+  Serial.print(" Pitch: "); Serial.print(presPosPitch); Serial.println("\t\t");
+
 
   presErrorPitch = presPosPitch - defaultBNO_Pitch;
   Kp_Pitch = calculateFuzzy(1 , presErrorPitch, 1);
@@ -93,25 +93,30 @@ void bacaBNOAwal() {
   Kd_Pitch = calculateFuzzy(1 , presErrorPitch, 3);
   errorAccumPitch = errorAccumPitch + presErrorPitch;
   dErr = (presErrorPitch - prevErrPitch) / (timeNow - prevRead);
-  Serial.print("kp");
-  Serial.println(Kp_Pitch);
-  Serial.print("ki");
-  Serial.println(Ki_Pitch);
-  Serial.print("kd");
-  Serial.println(Kd_Pitch);
-//  Serial.print("EPitch: "); Serial.print(presErrorPitch);  Serial.print("\t\t");
+  Serial.print("kpPitch :"); Serial.print(Kp_Pitch); Serial.print("\t\t");
+  Serial.print("kiPitch :"); Serial.print(Ki_Pitch); Serial.print("\t\t");
+  Serial.print("kdPitch :"); Serial.print(Kd_Pitch); Serial.println("\t\t");
+  Serial.print("EPitch: "); Serial.print(presErrorPitch);  Serial.println("\t\t");
   nextGoalPitch = Kp_Pitch * presErrorPitch + Ki_Pitch * errorAccumPitch + Kd_Pitch * dErr;
 
+  Serial.print(" Roll : "); Serial.print(presPosRoll); Serial.println("\t\t");
+
   presErrorRoll = presPosRoll - defaultBNO_Roll;
-  Kp_Roll_Kanan = calculateFuzzy(2 , presErrorRoll, 1);
-  Ki_Roll_Kanan = calculateFuzzy(2 , presErrorRoll, 2);
-  Kd_Roll_Kanan = calculateFuzzy(2 , presErrorRoll, 3);
-  Kp_Roll_Kiri  = calculateFuzzy(2 , presErrorRoll, 1);
-  Ki_Roll_Kiri  = calculateFuzzy(2 , presErrorRoll, 2);
-  Kd_Roll_Kiri  = calculateFuzzy(2 , presErrorRoll, 3);
+  Kp_Roll_Kanan = calculateFuzzy(2 , presErrorRoll, 4);
+  Ki_Roll_Kanan = calculateFuzzy(2 , presErrorRoll, 5);
+  Kd_Roll_Kanan = calculateFuzzy(2 , presErrorRoll, 6);
+  Kp_Roll_Kiri  = calculateFuzzy(2 , presErrorRoll, 4);
+  Ki_Roll_Kiri  = calculateFuzzy(2 , presErrorRoll, 5);
+  Kd_Roll_Kiri  = calculateFuzzy(2 , presErrorRoll, 6);
   errorAccumRoll = errorAccumRoll + presErrorRoll;
   dErr = (presErrorRoll - prevErrRoll) / (timeNow - prevRead);
-//  Serial.print("ERoll : "); Serial.print(presErrorRoll);  Serial.println("\t\t\n");
+  Serial.print("kpRollKa :"); Serial.print(Kp_Roll_Kanan); Serial.print("\t\t");
+  Serial.print("kiRollKa :"); Serial.print(Ki_Roll_Kanan); Serial.print("\t\t");
+  Serial.print("kdRollKa :"); Serial.print(Kd_Roll_Kanan); Serial.println("\t\t");
+  Serial.print("kpRollKi :"); Serial.print(Kp_Roll_Kiri); Serial.print("\t\t");
+  Serial.print("kiRollKi :"); Serial.print(Ki_Roll_Kiri); Serial.print("\t\t");
+  Serial.print("kdRollKi :"); Serial.print(Kd_Roll_Kiri); Serial.println("\t\t");
+  Serial.print("ERoll : "); Serial.print(presErrorRoll);  Serial.println("\t\t\n");
   nextGoalRoll_Kanan = Kp_Roll_Kanan * presErrorRoll + Ki_Roll_Kanan * errorAccumRoll + Kd_Roll_Kanan * dErr;
   nextGoalRoll_Kiri = Kp_Roll_Kiri * presErrorRoll + Ki_Roll_Kiri * errorAccumRoll + Kd_Roll_Kiri * dErr;
   // untuk masalah timing sementara approachnya tunning
@@ -121,9 +126,9 @@ void bacaBNOAwal() {
   prevRead = timeNow;
   currentTimeRema = millis();
   if ((currentTimeRema - lastTimeRema) >= 10) {
-//    Serial.print(presErrorPitch / 1);
-//    Serial.print(" ");
-//    Serial.println(presErrorRoll / 1);
+    //    Serial.print(presErrorPitch / 1);
+    //    Serial.print(" ");
+    //    Serial.println(presErrorRoll / 1);
     lastTimeRema = millis();
   }
 }
@@ -137,19 +142,19 @@ void bacaBNO() {
   presPosYaw = euler.x();
   timeNow = millis();
 
-//  Serial.print(" Pitch: "); Serial.print(presPosPitch); Serial.print("\t\t");
-//  Serial.print(" Roll : "); Serial.print(presPosRoll); Serial.println("\t\t");
+  //  Serial.print(" Pitch: "); Serial.print(presPosPitch); Serial.print("\t\t");
+  //  Serial.print(" Roll : "); Serial.print(presPosRoll); Serial.println("\t\t");
 
   presErrorPitch = presPosPitch - defaultBNO_Pitch;
   errorAccumPitch = errorAccumPitch + presErrorPitch;
   dErr = (presErrorPitch - prevErrPitch) / (timeNow - prevRead);
-//  Serial.print("EPitch: "); Serial.print(presErrorPitch);  Serial.print("\t\t");
+  //  Serial.print("EPitch: "); Serial.print(presErrorPitch);  Serial.print("\t\t");
   nextGoalPitch = Kp_Pitch * presErrorPitch + Ki_Pitch * errorAccumPitch + Kd_Pitch * dErr;
 
   presErrorRoll = presPosRoll - defaultBNO_Roll;
   errorAccumRoll = errorAccumRoll + presErrorRoll;
   dErr = (presErrorRoll - prevErrRoll) / (timeNow - prevRead);
-//  Serial.print("ERoll : "); Serial.print(presErrorRoll);  Serial.println("\t\t\n");
+  //  Serial.print("ERoll : "); Serial.print(presErrorRoll);  Serial.println("\t\t\n");
   nextGoalRoll_Kanan = Kp_Roll_Kanan * presErrorRoll + Ki_Roll_Kanan * errorAccumRoll + Kd_Roll_Kanan * dErr;
   nextGoalRoll_Kiri = Kp_Roll_Kiri * presErrorRoll + Ki_Roll_Kiri * errorAccumRoll + Kd_Roll_Kiri * dErr;
 

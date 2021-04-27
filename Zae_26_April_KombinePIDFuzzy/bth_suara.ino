@@ -6,40 +6,6 @@ unsigned long prevmillis = millis();
 unsigned long currentmillis,nowMillis,lastTime =  0;
 unsigned long jadi = 0;
 
-void suara(void)
-{
-  int analogSuara;
-  SerialSuara.write(0xFF);
-  delay(50);
-  if(SerialSuara.available()){
-    return SerialSuara.read();
-  }
-//  digitalWrite(36, 1);
-//  receiveData();
-//  while (Serial4.available()) {
-//    analogSuara = Serial4.read();
-//    Serial.print("data : "); Serial.println(analogSuara);
-//
-//  }
-//  Serial.print("DATAS : "); Serial.println(analogSuara);
-//  while ((analogSuara != 1))
-//  
-//  {
-//    if  (analogRead(17) > 800) break;
-//    if (Serial4.available()) {
-//      analogSuara = Serial4.read();
-//    }
-//    Serial.print("DATA: "); Serial.println(analogSuara);
-//    Serial.print("sauar: "); Serial.println(analogRead(37));
-//    delay(5);
-//    receiveData();
-//  }
-//  digitalWrite(36, LOW);
-//  //    if(filteredSuara > 1000)
-  //    {digitalWrite(led5, HIGH);}
-  //    digitalWrite(led5, LOW);
-}
-
 void waitHand(unsigned int variable)
 {
   transmitPulsaXL();
@@ -54,7 +20,7 @@ void waitHand(unsigned int variable)
   {
     currentmillis = millis();
     jadi = currentmillis - prevmillis;
-//    suara();
+//    
     //        Serial.print("Jadi: "); Serial.println(jadi);
   }
 }
@@ -72,7 +38,7 @@ void waitLeg(unsigned int variable)
   {
     currentmillis = millis();
     jadi = currentmillis - prevmillis;
-//    suara();
+//    
     //        Serial.print("Jadi: "); Serial.println(jadi);
   }
 }
@@ -91,7 +57,7 @@ void waitAll2(unsigned int variable)
   {
     currentmillis = micros();
     jadi = currentmillis - prevmillis;
-    suara();
+    
   }
 }
 
@@ -110,7 +76,7 @@ void waitAll(unsigned int variable)
   {
     currentmillis = micros();
     jadi = currentmillis - prevmillis;
-//    suara();
+//    
   }
 }
 
@@ -130,7 +96,7 @@ void waitAllTest2(unsigned int variable)
   {
     currentmillis = micros();
     jadi = currentmillis - prevmillis;
-//    suara();
+//    
   }
 }
 
@@ -155,7 +121,7 @@ void waitAllTest3(unsigned int variable)
     currentmillis = micros();
     jadi = currentmillis - prevmillis;
     once = 0;
-//    suara();
+//    
   }
 }
 
@@ -175,7 +141,7 @@ void waitAllBNO(unsigned int variable)
     nowMillis = millis();
     currentmillis = micros();
     jadi = currentmillis - prevmillis;
-    //    suara();
+    //    
     if ((nowMillis - lastTime) >= variable / 4) {
       Serial.println((nowMillis - lastTime));
       bacaBNO();
