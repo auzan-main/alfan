@@ -207,7 +207,7 @@ void setup()
   //  {
   //    Serial.println("Belom Jalan Bray");
   //  }
-    BNOsetup();
+  BNOsetup();
 
   //              StartZae();  //IKUZOOOOOOOOOOOOOOOO`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   waitAll(3000);
@@ -224,7 +224,6 @@ void setup()
 
   //              StartZae();  //IKUZOOOOOOOOOOOOOOOO`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   waitAll(3000);
-  //////////////// langkah 1 ///////////////////////
   //  langkahKaInversBaru(double xKakiKiri, double xKakiKanan, double tinggiBadan, double tinggiLangkah, double periodeLangkah);
   //  invers(KANAN, 20, 0 , 15 , 0 , 0); //m-nya ini nanti di plus correctionnya
   //  invers(KIRI , 20 , 0 , 15, 0 , 0);
@@ -235,15 +234,15 @@ void setup()
   gerakinvers(KIRI, 5, 0, 4, 20);
   gerakinvers(KANAN, 5, -6, 5.5, 19);
   waitAll(500);
-  ////  /////////////////// Step 2//////////////
+  //// /////////////////// Step 2//////////////
   gerakinvers(KIRI, 5, 1, 5, 19);
   gerakinvers(KANAN,  5, 1, 7, 15.5);
   waitAll(500);
-  ////   ///////////////////step3////////////////////////////
+  ///////////////////////step3////////////////////////////
   gerakinvers(KIRI, 5, 1, 5, 19);
   gerakinvers(KANAN,  5, 7, 9, 16.5);
   waitAll(500);
-  //   ////////////////Step 4////////////////////////
+  //////////////////Step 4////////////////////////
   gerakinvers(KIRI, 5, 0, -1.5, 20);
   gerakinvers(KANAN, 5, 8.3, 1.5, 20);//kiri
   //    waitAll(500);
@@ -255,15 +254,15 @@ void setup()
   ///////////////  langkah 3 ///////////////////////
   //  tampilsudut();
 
-//  posisiDefault();
+  //  posisiDefault();
 
 
 }
 
 void loop()
 {
-    bacaBNOAwal();
-    delay(3000);
+  bacaBNOAwal();
+  delay(3000);
 }
 
 
@@ -317,12 +316,7 @@ void gerakinvers (byte F, double times, double x, double y, double ztot)
   Qo = ((acos(x / LA) / phi) * 180);
   Qp = ((asin(l4 / LB) / phi) * 180);
   Qq = (180 - Qn - Qo - Qp);
-  //  if (x < 0) {
-  //    Q1 = -(Qj + Qk);
-  //  }
-  //  if (x > 0) {
   Q1 = (Qj + Qk);
-  //  }
   Q2 = (180 - Qm);
   Q3 = (90 - Qp - Qq);
   Q4 = ((asin(y / (l2 + l3)) / phi) * 180);
