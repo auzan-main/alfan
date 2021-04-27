@@ -210,7 +210,7 @@ void setup()
   BNOsetup();
 
   //              StartZae();  //IKUZOOOOOOOOOOOOOOOO`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  waitAll(3000);
+  waitAll(2000);
   /*============== arah invers======
      nb : arah kaki berlawanan dengan arah badan tergantung stay di ground atau enggak(kaki base)
    * *ketika kaki jadi base.
@@ -223,29 +223,26 @@ void setup()
   */
 
   //              StartZae();  //IKUZOOOOOOOOOOOOOOOO`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  waitAll(3000);
-  //  langkahKaInversBaru(double xKakiKiri, double xKakiKanan, double tinggiBadan, double tinggiLangkah, double periodeLangkah);
-  //  invers(KANAN, 20, 0 , 15 , 0 , 0); //m-nya ini nanti di plus correctionnya
-  //  invers(KIRI , 20 , 0 , 15, 0 , 0);
-  gerakinvers(KIRI, 30, 0, -1.5, 20);
-  gerakinvers(KANAN, 30, -6, 1.5, 20);
-  waitAll(2000);
+
+  gerakinvers(KIRI, 10, 0, -1.5, 19);
+  gerakinvers(KANAN, 10, -8, 1.5, 19);
+  waitAll(6000);
   ////////////////// Step 1/////////////
-  gerakinvers(KIRI, 5, 0, 4, 20);
-  gerakinvers(KANAN, 5, -6, 5.5, 19);
+  gerakinvers(KIRI, 5, -3, 6, 19);
+  gerakinvers(KANAN, 5, -8, 7.3, 19);
   waitAll(500);
-  //// /////////////////// Step 2//////////////
-  gerakinvers(KIRI, 5, 1, 5, 19);
-  gerakinvers(KANAN,  5, 1, 7, 15.5);
+//  ////  /////////////////// Step 2//////////////
+  gerakinvers(KIRI, 5, -3, 6, 19);
+  gerakinvers(KANAN,  5, 1, 11, 15.5);
   waitAll(500);
-  ///////////////////////step3////////////////////////////
-  gerakinvers(KIRI, 5, 1, 5, 19);
-  gerakinvers(KANAN,  5, 7, 9, 16.5);
-  waitAll(500);
-  //////////////////Step 4////////////////////////
-  gerakinvers(KIRI, 5, 0, -1.5, 20);
-  gerakinvers(KANAN, 5, 8.3, 1.5, 20);//kiri
-  //    waitAll(500);
+////  ////   ///////////////////step3////////////////////////////
+//  gerakinvers(KIRI, 5, 1, 5, 19);
+//  gerakinvers(KANAN,  5, 7, 9, 16.5);
+//  waitAll(500);
+////  //   ////////////////Step 4////////////////////////
+//  gerakinvers(KIRI, 5, 0, -1.5, 20);
+//  gerakinvers(KANAN, 5, 8.3, 1.5, 20);//kiri
+//  waitAll(500);
   //      langkahKaInversBaru(-3, 3, 20, 3, 4);
 
   //////////////// langkah 2 ///////////////////////
@@ -316,7 +313,12 @@ void gerakinvers (byte F, double times, double x, double y, double ztot)
   Qo = ((acos(x / LA) / phi) * 180);
   Qp = ((asin(l4 / LB) / phi) * 180);
   Qq = (180 - Qn - Qo - Qp);
+  //  if (x < 0) {
+  //    Q1 = -(Qj + Qk);
+  //  }
+  //  if (x > 0) {
   Q1 = (Qj + Qk);
+  //  }
   Q2 = (180 - Qm);
   Q3 = (90 - Qp - Qq);
   Q4 = ((asin(y / (l2 + l3)) / phi) * 180);
@@ -334,7 +336,7 @@ void gerakinvers (byte F, double times, double x, double y, double ztot)
   }
 
   else if (F == 1) {
-    dynamixel(1, 12, KIRI12 + Q1, times); //-nekuk
+    dynamixel(1, 12, KIRI12 + Q1 - 4, times); //-nekuk
     dynamixel(1, 13, KIRI13 - Q2, times); //+jinjit //dynamixel(1, 14, KIRI14 - t3 + tjKi+PID_Roll, times); //+jinjit
     dynamixel(1, 14, KIRI14 - Q3, times); //-buka,+nutup  times * 0.95
     dynamixel(1, 15, KIRI15 - Q4, times); //-mundur,+maju //dynamixel(1, 12, KIRI12 + t1 + (90 - tb) + PID_Roll, times * 0.95); //-mundur,+maju
