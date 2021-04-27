@@ -7,6 +7,15 @@ void walkTestingPID(){
   waitAll(200);
 }
 
+void walkTestingPID_FASTER(){
+  langkahKaCobaPID_FASTER(-3, 3, 16.7, 3, 1.5);
+  CountJalan++;
+  waitAll(200);
+  langkahKiCobaPID_FASTER(-3, 3, 16.7, 3, 1.5);
+  CountJalan++;
+  waitAll(200);
+}
+
 void walkNganjatHue1(){
   langkahKaNganjatHue1(-3, 3, 16.7, 3, 2);
   CountJalan++;

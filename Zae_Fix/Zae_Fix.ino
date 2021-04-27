@@ -1,4 +1,4 @@
- //#include <EEPROM.h>
+//#include <EEPROM.h>
 //#include <SPI.h>
 #include <SD.h>
 #include <Wire.h>
@@ -70,7 +70,7 @@
 //bool inLedMerah, inLedBiru;
 //int SwitchIn1, SwitchIn2;
 //int imu;
-int lastTimeRema = 0, currentTimeRema;
+//int lastTimeRema = 0, currentTimeRema;
 unsigned long waktuIMUPrev;
 double errorPrev;
 float step_x, step_y, step_z;
@@ -207,35 +207,47 @@ void setup()
   //  {
   //    Serial.println("Belom Jalan Bray");
   //  }
-  //  BNOsetup();
+    BNOsetup();
+
+  //              StartZae();  //IKUZOOOOOOOOOOOOOOOO`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  waitAll(3000);
+  /*============== arah invers======
+     nb : arah kaki berlawanan dengan arah badan tergantung stay di ground atau enggak(kaki base)
+   * *ketika kaki jadi base.
+     +x = badan kebelakang
+     -x = badan kedepan
+     +y = badan ke kiri
+     -y = badan ke kanan
+     +z = badan keatas
+     -z = badan kebawah
+  */
 
   //              StartZae();  //IKUZOOOOOOOOOOOOOOOO`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   waitAll(3000);
   //////////////// langkah 1 ///////////////////////
   //  langkahKaInversBaru(double xKakiKiri, double xKakiKanan, double tinggiBadan, double tinggiLangkah, double periodeLangkah);
-//  gerakinvers(KIRI, 30+20, 0, 5, 20);
-//  gerakinvers(KANAN, 30+20, 0, 5,20);
-//   waitAll(2000);
-//  gerakinvers(KIRI, 30+20, 3, 0, 20);
-//  gerakinvers(KANAN, 30+20, -6, 0,20);
-//   waitAll(2000);
-   ////////////////// Step 1/////////////
-//  gerakinvers(KIRI, 30, 3, 3, 20);
-//  gerakinvers(KANAN,  30, 2, 5,17);
-//  waitAll(3000);
-//  /////////////////// Step 2//////////////
-//  gerakinvers(KIRI, 20, 3, 5, 20);
-//  gerakinvers(KANAN,  20, 6, 10,15);
-//   waitAll(2000);
-//   ///////////////////step3////////////////////////////
-//  gerakinvers(KIRI, 20, 3, 2, 20);
-//  gerakinvers(KANAN,  20, 5, 10,19);
-//   waitAll(2000);
-   ////////////////Step 4////////////////////////
-  //  gerakinvers(0, 30, 9, 0, 17);//kanan turun
-  //  gerakinvers(1, 30, 3, 0, 17);//kiri
-  //  waitAll(3000);
-      langkahKaInversBaru(-3, 3, 20, 3, 4);
+  //  invers(KANAN, 20, 0 , 15 , 0 , 0); //m-nya ini nanti di plus correctionnya
+  //  invers(KIRI , 20 , 0 , 15, 0 , 0);
+  gerakinvers(KIRI, 30, 0, -1.5, 20);
+  gerakinvers(KANAN, 30, -6, 1.5, 20);
+  waitAll(2000);
+  ////////////////// Step 1/////////////
+  gerakinvers(KIRI, 5, 0, 4, 20);
+  gerakinvers(KANAN, 5, -6, 5.5, 19);
+  waitAll(500);
+  ////  /////////////////// Step 2//////////////
+  gerakinvers(KIRI, 5, 1, 5, 19);
+  gerakinvers(KANAN,  5, 1, 7, 15.5);
+  waitAll(500);
+  ////   ///////////////////step3////////////////////////////
+  gerakinvers(KIRI, 5, 1, 5, 19);
+  gerakinvers(KANAN,  5, 7, 9, 16.5);
+  waitAll(500);
+  //   ////////////////Step 4////////////////////////
+  gerakinvers(KIRI, 5, 0, -1.5, 20);
+  gerakinvers(KANAN, 5, 8.3, 1.5, 20);//kiri
+  //    waitAll(500);
+  //      langkahKaInversBaru(-3, 3, 20, 3, 4);
 
   //////////////// langkah 2 ///////////////////////
 
@@ -243,14 +255,15 @@ void setup()
   ///////////////  langkah 3 ///////////////////////
   //  tampilsudut();
 
-  posisiDefault();
+//  posisiDefault();
 
 
 }
 
 void loop()
 {
-  //  bacaBNO();
+    bacaBNOAwal();
+    delay(3000);
 }
 
 
@@ -472,8 +485,8 @@ void langkahKaInversBaru(double xKakiKiri, double xKakiKanan, double tinggiBadan
           pa = 7;    //9 roll angkle kanan
           tjKa = -2;   //2pitch kanan
           tjKi = -1;  //pitch kiri
-//          gerakinvers(KIRI, times + 3, 0  , 0 , tinggiBadan);
-//          gerakinvers(KANAN, times + 3, 7 , 2.5, tinggiBadan - 0.7);
+          //          gerakinvers(KIRI, times + 3, 0  , 0 , tinggiBadan);
+          //          gerakinvers(KANAN, times + 3, 7 , 2.5, tinggiBadan - 0.7);
           //          //         Serial.println("AWAL=========================================Langkah 3============================================F======");
           a = 0;
           step = 4;
@@ -502,8 +515,8 @@ void langkahKaInversBaru(double xKakiKiri, double xKakiKanan, double tinggiBadan
           tjKa = 0; //pitch kanan
           tjKi = 0; //pitch kiri
 
-//          gerakinvers(KIRI, times+3, -3 , 0, tinggiBadan); //m+ badan depan
-//          gerakinvers(KANAN, times+3, 3, 0 , tinggiBadan - sfZ);
+          //          gerakinvers(KIRI, times+3, -3 , 0, tinggiBadan); //m+ badan depan
+          //          gerakinvers(KANAN, times+3, 3, 0 , tinggiBadan - sfZ);
           //         Serial.println("AWAL=========================================Langkah 4============================================F======");
           step = 5;
           transmitPulsa(); transmitPulsaXL(); transmitPulsaAX();
