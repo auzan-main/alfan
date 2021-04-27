@@ -1,3 +1,9 @@
+/*Keterangan Himpunan Fuzzy
+ * Input : Pitch, Roll
+ * Himpunan : 3, rendah, sedang, ekstrim
+ * Rules : masing-masing himpunan 3 kondisi
+ * Output : 3, kp, ki, kd
+ */
 #include <Fuzzy.h>
 
 // Instantiating a Fuzzy object
