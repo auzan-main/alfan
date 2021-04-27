@@ -1,3 +1,7 @@
+/*
+ * Keterangan Fuzzy
+ * 
+ */
 #include <Fuzzy.h>
 
 // Instantiating a Fuzzy object
