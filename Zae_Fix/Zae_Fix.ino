@@ -191,6 +191,10 @@ void setup()
 
   transmitTorsi(1);
   posisiDefault();
+  
+  
+  
+//  dynamixeldef(1, 7, 100, 10);
   waitAll(2000);
   pinMode(13, OUTPUT);
   pinMode(16, OUTPUT);
@@ -210,7 +214,7 @@ void setup()
   BNOsetup();
 
   //              StartZae();  //IKUZOOOOOOOOOOOOOOOO`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  waitAll(2000);
+  waitAll(1000);
   /*============== arah invers======
      nb : arah kaki berlawanan dengan arah badan tergantung stay di ground atau enggak(kaki base)
    * *ketika kaki jadi base.
@@ -223,26 +227,47 @@ void setup()
   */
 
   //              StartZae();  //IKUZOOOOOOOOOOOOOOOO`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  /*
+   * Langkah Kanan 
+   */
+  //start
+  gerakinvers(KIRI, 20, 0, 0, 20);
+  gerakinvers(KANAN, 20, -8, 0, 20);
+  waitAll(4000);
+////  ////////////////// Step 1/////////////
+  gerakinvers(KIRI, 5, 0, 2, 20);
+  gerakinvers(KANAN, 5, -6, 1, 20);
+  waitAll(500);
+//////  ////  /////////////////// Step 2//////////////
+  gerakinvers(KIRI, 5, 0-5, 2, 20);
+  gerakinvers(KANAN, 5, -6, 3, 20-3);//Y=10, Z=16
+  waitAll(500);
+////////  ////   ///////////////////step3////////////////////////////
+//  gerakinvers(KIRI, 5, -3, 5, 20);
+//  gerakinvers(KANAN, 5, 2, 9, 18);
+//  waitAll(500);
+////////  //   ////////////////Step 4 fix////////////////////////
+//  gerakinvers(KIRI, 5, -3, 0, 20);
+//  gerakinvers(KANAN, 5, 3.5, 0, 20);//kiri
+//  waitAll(500);
 
-  gerakinvers(KIRI, 10, 0, -1.5, 19);
-  gerakinvers(KANAN, 10, -8, 1.5, 19);
-  waitAll(6000);
-  ////////////////// Step 1/////////////
-  gerakinvers(KIRI, 5, -3, 6, 19);
-  gerakinvers(KANAN, 5, -8, 7.3, 19);
-  waitAll(500);
-//  ////  /////////////////// Step 2//////////////
-  gerakinvers(KIRI, 5, -3, 6, 19);
-  gerakinvers(KANAN,  5, 1, 11, 15.5);
-  waitAll(500);
-////  ////   ///////////////////step3////////////////////////////
-//  gerakinvers(KIRI, 5, 1, 5, 19);
-//  gerakinvers(KANAN,  5, 7, 9, 16.5);
-//  waitAll(500);
-////  //   ////////////////Step 4////////////////////////
-//  gerakinvers(KIRI, 5, 0, -1.5, 20);
-//  gerakinvers(KANAN, 5, 8.3, 1.5, 20);//kiri
-//  waitAll(500);
+  /*
+   * Langkah Kiri
+   */
+  //start
+//  gerakinvers(KIRI, 5, -3, 0, 20);
+//  gerakinvers(KANAN, 5, 3.5, 0, 20);//kiri
+//  waitAll(4000);
+//  //  ////////////////// Step 1/////////////
+//  gerakinvers(KIRI, 5, -3, -3, 20);
+//  gerakinvers(KANAN, 5, 3.5, -2, 20);
+//  waitAll(800);
+//  /////  ////  /////////////////// Step 2//////////////
+//  gerakinvers(KIRI, 5, 2, -10, 17);
+//  gerakinvers(KANAN, 5, 3.5, -5.8, 20);//Y=10, Z=16
+//  waitAll(800);
+
+  
   //      langkahKaInversBaru(-3, 3, 20, 3, 4);
 
   //////////////// langkah 2 ///////////////////////
@@ -258,8 +283,8 @@ void setup()
 
 void loop()
 {
-  bacaBNOAwal();
-  delay(3000);
+//  bacaBNOAwal();
+//  delay(3000);
 }
 
 
