@@ -191,10 +191,10 @@ void setup()
 
   transmitTorsi(1);
   posisiDefault();
-  
-  
-  
-//  dynamixeldef(1, 7, 100, 10);
+
+
+
+  //  dynamixeldef(1, 7, 100, 10);
   waitAll(2000);
   pinMode(13, OUTPUT);
   pinMode(16, OUTPUT);
@@ -211,7 +211,7 @@ void setup()
   //  {
   //    Serial.println("Belom Jalan Bray");
   //  }
-  BNOsetup();
+  //  BNOsetup();
 
   //              StartZae();  //IKUZOOOOOOOOOOOOOOOO`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   waitAll(1000);
@@ -228,47 +228,51 @@ void setup()
 
   //              StartZae();  //IKUZOOOOOOOOOOOOOOOO`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   /*
-   * Langkah Kanan 
-   */
+     Langkah Kanan
+  */
   //start
-  gerakinvers(KIRI, 20, 0, 0, 20);
-  gerakinvers(KANAN, 20, -8, 0, 20);
+    pi = 30;
+  gerakinvers(KIRI, 20, 0, 0, 24);
+  gerakinvers(KANAN, 20, 0, 0, 24);
   waitAll(4000);
-////  ////////////////// Step 1/////////////
-  gerakinvers(KIRI, 5, 0, 2, 20);
-  gerakinvers(KANAN, 5, -6, 1, 20);
-  waitAll(500);
-//////  ////  /////////////////// Step 2//////////////
-  gerakinvers(KIRI, 5, 0-5, 2, 20);
-  gerakinvers(KANAN, 5, -6, 3, 20-3);//Y=10, Z=16
-  waitAll(500);
-////////  ////   ///////////////////step3////////////////////////////
-//  gerakinvers(KIRI, 5, -3, 5, 20);
-//  gerakinvers(KANAN, 5, 2, 9, 18);
-//  waitAll(500);
-////////  //   ////////////////Step 4 fix////////////////////////
-//  gerakinvers(KIRI, 5, -3, 0, 20);
-//  gerakinvers(KANAN, 5, 3.5, 0, 20);//kiri
-//  waitAll(500);
+  //  gerakinvers(KIRI, 20, 0, 0, 20);
+  //  gerakinvers(KANAN, 20, -8, 0, 20);
+  //  waitAll(4000);
+  ////  ////////////////// Step 1/////////////
+  //    gerakinvers(KIRI, 5, 0, 2, 20);
+  //    gerakinvers(KANAN, 5, -6, 1, 20);
+  //  waitAll(500);
+  //  //////  ////  /////////////////// Step 2//////////////
+  //  gerakinvers(KIRI, 5, 0 - 2, 2 + 4, 20);
+  //  gerakinvers(KANAN, 5, -6 + 1, 6+3, 20 - 2.5); //Y=10, Z=16
+  //  waitAll(500);
+  //  ////////  ////   ///////////////////step3////////////////////////////
+  //  gerakinvers(KIRI, 5, -3 - 3, 5 + 2, 20);
+  //  gerakinvers(KANAN, 5, -2, 10, 20 - 2);
+  //  waitAll(500);
+  //  ////////  //   ////////////////Step 4 fix////////////////////////
+  //  gerakinvers(KIRI, 5, -8, 0, 20);
+  //  gerakinvers(KANAN, 5, 0, 0, 20);//kiri
+  //  waitAll(500);
 
   /*
-   * Langkah Kiri
-   */
+     Langkah Kiri
+  */
   //start
-//  gerakinvers(KIRI, 5, -3, 0, 20);
-//  gerakinvers(KANAN, 5, 3.5, 0, 20);//kiri
-//  waitAll(4000);
-//  //  ////////////////// Step 1/////////////
-//  gerakinvers(KIRI, 5, -3, -3, 20);
-//  gerakinvers(KANAN, 5, 3.5, -2, 20);
-//  waitAll(800);
-//  /////  ////  /////////////////// Step 2//////////////
-//  gerakinvers(KIRI, 5, 2, -10, 17);
-//  gerakinvers(KANAN, 5, 3.5, -5.8, 20);//Y=10, Z=16
-//  waitAll(800);
+  //  gerakinvers(KIRI, 5, -3, 0, 20);
+  //  gerakinvers(KANAN, 5, 3.5, 0, 20);//kiri
+  //  waitAll(4000);
+  //  //  ////////////////// Step 1/////////////
+  //  gerakinvers(KIRI, 5, -3, -3, 20);
+  //  gerakinvers(KANAN, 5, 3.5, -2, 20);
+  //  waitAll(800);
+  //  /////  ////  /////////////////// Step 2//////////////
+  //  gerakinvers(KIRI, 5, 2, -10, 17);
+  //  gerakinvers(KANAN, 5, 3.5, -5.8, 20);//Y=10, Z=16
+  //  waitAll(800);
 
-  
-  //      langkahKaInversBaru(-3, 3, 20, 3, 4);
+
+  //  langkahKaInversBaru(-3, 3, 20, 3, 4);
 
   //////////////// langkah 2 ///////////////////////
 
@@ -283,8 +287,8 @@ void setup()
 
 void loop()
 {
-//  bacaBNOAwal();
-//  delay(3000);
+  //  bacaBNOAwal();
+  //  delay(3000);
 }
 
 
@@ -352,20 +356,22 @@ void gerakinvers (byte F, double times, double x, double y, double ztot)
 
 
   if (F == 0) {
-    dynamixel(1, 2, KANAN2 - Q1, times); //-maju,+mundur //dynamixel(1, 2, KANAN2 - t1 - (90 - tb) - PID_Roll, times * 0.95); //-maju,+mundur
-    dynamixel(1, 3, KANAN3 + Q2, times); //+nekuk
+    dynamixel(1, 1, KANAN1 + tPa, times);//+ 
+    dynamixel(1, 2, KANAN2 - Q1 + tb, times); // //dynamixel(1, 2, KANAN2 - t1 - (90 - tb) - PID_Roll, times * 0.95); //-maju,+mundur
+    dynamixel(1, 3, KANAN3 + Q2, times); 
     dynamixel(1, 4, KANAN4 + Q3, times);
-    dynamixel(1, 5, KANAN5 - Q4, times);
-    dynamixel(1, 6, KANAN6 - Q5, times);
+    dynamixel(1, 5, KANAN5 - Q4 - tKa, times);
+    dynamixel(1, 6, KANAN6 - Q5 - pa, times);+badan kekiri +tapak kaki hadap kiri
     waitAll (100);
   }
 
   else if (F == 1) {
-    dynamixel(1, 12, KIRI12 + Q1 - 4, times); //-nekuk
-    dynamixel(1, 13, KIRI13 - Q2, times); //+jinjit //dynamixel(1, 14, KIRI14 - t3 + tjKi+PID_Roll, times); //+jinjit
-    dynamixel(1, 14, KIRI14 - Q3, times); //-buka,+nutup  times * 0.95
-    dynamixel(1, 15, KIRI15 - Q4, times); //-mundur,+maju //dynamixel(1, 12, KIRI12 + t1 + (90 - tb) + PID_Roll, times * 0.95); //-mundur,+maju
-    dynamixel(1, 16, KIRI16 - Q5, times); //+buka,-nutup
+    dynamixel(1, 11, KIRI11 + tPi, times);
+    dynamixel(1, 12, KIRI12 + Q1 - tb, times); //
+    dynamixel(1, 13, KIRI13 - Q2, times); // //dynamixel(1, 14, KIRI14 - t3 + tjKi+PID_Roll, times); //+jinjit
+    dynamixel(1, 14, KIRI14 - Q3 + tjKi, times); //  times * 0.95
+    dynamixel(1, 15, KIRI15 - Q4 + tKi, times); // //dynamixel(1, 12, KIRI12 + t1 + (90 - tb) + PID_Roll, times * 0.95); //-mundur,+maju
+    dynamixel(1, 16, KIRI16 - Q5 - pi, times); //+badan kekiri +tapak kaki hadap kiri
     waitAll(100);
   }
 }
@@ -424,9 +430,6 @@ void langkahKaInversBaru(double xKakiKiri, double xKakiKanan, double tinggiBadan
   prevteTA = prevte;
   t = 0;
   te = 0;
-  //  kordinatLangkahKi();
-  //  walkInitGJ3();
-  walkInitGJ3Belok(3, -3, 4.5, 4.5);
   //  Serial.print("te : ");Serial.println(te);
   while (TS + 0.05 >= te)
   {
@@ -453,8 +456,8 @@ void langkahKaInversBaru(double xKakiKiri, double xKakiKanan, double tinggiBadan
           tjKa = -0.5;   //pitch kanan servo 4
           tjKi = -2;  //pitch kiri servo 14
 
-          gerakinvers(KIRI, times + 3, 3 - 3.06, 0 , tinggiBadan);
-          gerakinvers(KANAN , times + 3, -3 - 3.06 , 0, tinggiBadan);
+          gerakinvers(KIRI, times , 0 , 2 , tinggiBadan);
+          gerakinvers(KANAN , times , -3 - 3.06 , 1, tinggiBadan);
           //         Serial.println("==============================================Langkah 1==================================================");
           a = 0;
           step = 2;
@@ -479,8 +482,8 @@ void langkahKaInversBaru(double xKakiKiri, double xKakiKanan, double tinggiBadan
           pa = 7;     //18; //roll angkle kanan
           tjKa = -1;   //pitch kanan
           tjKi = -1;  //pitch kiri
-          gerakinvers(KIRI, times  + 3, 3 - 3.06, 0, tinggiBadan);
-          gerakinvers(KANAN, times  + 3, 5.5 - 3.06, -5, tinggiBadan - 3.5);
+          gerakinvers(KIRI, times , 0 - 2, 2 + 4, tinggiBadan);
+          gerakinvers(KANAN, times , -6 + 1, 6 + 3, tinggiBadan - 2.5);
           //          //         Serial.println("=========================================Langkah 2===============================================");
           a = 0;
           step = 3;
@@ -506,8 +509,8 @@ void langkahKaInversBaru(double xKakiKiri, double xKakiKanan, double tinggiBadan
           pa = 7;    //9 roll angkle kanan
           tjKa = -2;   //2pitch kanan
           tjKi = -1;  //pitch kiri
-          //          gerakinvers(KIRI, times + 3, 0  , 0 , tinggiBadan);
-          //          gerakinvers(KANAN, times + 3, 7 , 2.5, tinggiBadan - 0.7);
+          gerakinvers(KIRI, times , -3 - 3  , 5 + 2 , tinggiBadan);
+          gerakinvers(KANAN, times , -2 , 10, tinggiBadan - 2);
           //          //         Serial.println("AWAL=========================================Langkah 3============================================F======");
           a = 0;
           step = 4;
@@ -536,8 +539,8 @@ void langkahKaInversBaru(double xKakiKiri, double xKakiKanan, double tinggiBadan
           tjKa = 0; //pitch kanan
           tjKi = 0; //pitch kiri
 
-          //          gerakinvers(KIRI, times+3, -3 , 0, tinggiBadan); //m+ badan depan
-          //          gerakinvers(KANAN, times+3, 3, 0 , tinggiBadan - sfZ);
+          gerakinvers(KIRI, times + 3, -8 , 0, tinggiBadan); //m+ badan depan
+          gerakinvers(KANAN, times + 3, 0, 0 , tinggiBadan );
           //         Serial.println("AWAL=========================================Langkah 4============================================F======");
           step = 5;
           transmitPulsa(); transmitPulsaXL(); transmitPulsaAX();
