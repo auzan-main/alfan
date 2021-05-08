@@ -230,14 +230,16 @@ void setup()
   /*
      Langkah Kanan
   */
+
+//    tb = 30;
+  //    dynamixel(1, 4, KANAN4-tjKa, 20);
+//    gerakinvers(KIRI, 20, 0, 0, 23.5);
+//    gerakinvers(KANAN, 20, 0, 0, 23.5);
+//    waitAll(4000);
   //start
-    pi = 30;
-  gerakinvers(KIRI, 20, 0, 0, 24);
-  gerakinvers(KANAN, 20, 0, 0, 24);
+  gerakinvers(KANAN, 20, 0, 0, 20);
+  gerakinvers(KIRI, 20, -6, 0, 20);
   waitAll(4000);
-  //  gerakinvers(KIRI, 20, 0, 0, 20);
-  //  gerakinvers(KANAN, 20, -8, 0, 20);
-  //  waitAll(4000);
   ////  ////////////////// Step 1/////////////
   //    gerakinvers(KIRI, 5, 0, 2, 20);
   //    gerakinvers(KANAN, 5, -6, 1, 20);
@@ -270,19 +272,14 @@ void setup()
   //  gerakinvers(KIRI, 5, 2, -10, 17);
   //  gerakinvers(KANAN, 5, 3.5, -5.8, 20);//Y=10, Z=16
   //  waitAll(800);
-
-
-  //  langkahKaInversBaru(-3, 3, 20, 3, 4);
-
-  //////////////// langkah 2 ///////////////////////
-
-
-  ///////////////  langkah 3 ///////////////////////
-  //  tampilsudut();
-
-  //  posisiDefault();
-
-
+  langkahKiInversBaru(-3, 3, 20, 3, 2);
+  waitAll(200);
+  langkahKaInversBaru(-3, 3, 20, 3, 2);
+  waitAll(200);
+  langkahKiInversBaru(-3, 3, 20, 3, 2);
+  waitAll(200);
+  langkahKaInversBaru(-3, 3, 20, 3, 2);
+  waitAll(200);
 }
 
 void loop()
@@ -354,24 +351,26 @@ void gerakinvers (byte F, double times, double x, double y, double ztot)
   Qa = ((acos(y / (l2 + l3)) / phi) * 180);
   Q5 = (180 - 90 - Qa);
 
-
+/*nb : tb itu untuk pergerakan servo 2 dan 12 bersamaan biar bisa majuin/mundurin badan
+        (+ badan kebelakang - badan kedepan)
+*/
   if (F == 0) {
-    dynamixel(1, 1, KANAN1 + tPa, times);//+ 
+    dynamixel(1, 1, KANAN1 + tPa, times);//+servo 1 mutar ke kanan(kondisi swing)
     dynamixel(1, 2, KANAN2 - Q1 + tb, times); // //dynamixel(1, 2, KANAN2 - t1 - (90 - tb) - PID_Roll, times * 0.95); //-maju,+mundur
-    dynamixel(1, 3, KANAN3 + Q2, times); 
-    dynamixel(1, 4, KANAN4 + Q3, times);
-    dynamixel(1, 5, KANAN5 - Q4 - tKa, times);
-    dynamixel(1, 6, KANAN6 - Q5 - pa, times);+badan kekiri +tapak kaki hadap kiri
+    dynamixel(1, 3, KANAN3 + Q2, times);
+    dynamixel(1, 4, KANAN4 + Q3 - tjKa, times);//(swing : +tapak kaki hadap belakang)(base : +badan kebelakang)
+    dynamixel(1, 5, KANAN5 - Q4 - tKa, times);//(swing : + kaki kekanan)(base : +badan ke kanan)
+    dynamixel(1, 6, KANAN6 - Q5 - pa, times);//(base : +badan kekiri) (swing : +tapak kaki hadap kiri)
     waitAll (100);
   }
 
   else if (F == 1) {
-    dynamixel(1, 11, KIRI11 + tPi, times);
+    dynamixel(1, 11, KIRI11 + tPi, times);//+servo 11 mutar ke kanan(kondisi swing)
     dynamixel(1, 12, KIRI12 + Q1 - tb, times); //
     dynamixel(1, 13, KIRI13 - Q2, times); // //dynamixel(1, 14, KIRI14 - t3 + tjKi+PID_Roll, times); //+jinjit
-    dynamixel(1, 14, KIRI14 - Q3 + tjKi, times); //  times * 0.95
-    dynamixel(1, 15, KIRI15 - Q4 + tKi, times); // //dynamixel(1, 12, KIRI12 + t1 + (90 - tb) + PID_Roll, times * 0.95); //-mundur,+maju
-    dynamixel(1, 16, KIRI16 - Q5 - pi, times); //+badan kekiri +tapak kaki hadap kiri
+    dynamixel(1, 14, KIRI14 - Q3 + tjKi, times); //(swing : +tapak kaki hadap belakang)(base : +badan kebelakang)
+    dynamixel(1, 15, KIRI15 - Q4 + tKi, times); //(swing : + kaki kekiri)(base : +badan ke kiri)
+    dynamixel(1, 16, KIRI16 - Q5 - pi, times); //(base : +badan kekiri) (swing: +tapak kaki hadap kiri)
     waitAll(100);
   }
 }
@@ -446,18 +445,19 @@ void langkahKaInversBaru(double xKakiKiri, double xKakiKanan, double tinggiBadan
           //          GJ3Ki1(times);
           prevte = te;
           walkUpdate(TS * 0.25);
-          //          tjKa = 5;
-          tPa = 0;      //yaw servo 1
-          tPi = 0;      //yaw servo 11
-          tKa = 14;   //hips  servo 2
-          tKi = -11.5;  //hips servo 12
-          pi = 15;     //11.5; //roll agkle kiri servo 16
-          pa = 15;     //11.5; //roll angkle kanan servo 6
-          tjKa = -0.5;   //pitch kanan servo 4
-          tjKi = -2;  //pitch kiri servo 14
+
+          tb = 0;
+          tPa = 0;      
+          tPi = 0;      
+          tKa = 0; //14  
+          tKi = 0; //-11.5 
+          pi = 0; //15    
+          pa = 0; //15    
+          tjKa = 0;//-0.5  
+          tjKi = 0;//-2  
 
           gerakinvers(KIRI, times , 0 , 2 , tinggiBadan);
-          gerakinvers(KANAN , times , -3 - 3.06 , 1, tinggiBadan);
+          gerakinvers(KANAN , times , -3 - 3.06 , 0, tinggiBadan);
           //         Serial.println("==============================================Langkah 1==================================================");
           a = 0;
           step = 2;
@@ -474,16 +474,17 @@ void langkahKaInversBaru(double xKakiKiri, double xKakiKanan, double tinggiBadan
           prevte = te;
           walkUpdate(TS * 0.5);
 
-          tPa = -1;
+          tb = -7;
+          tPa = -3;//-1
           tPi = 0;
-          tKa = 8.5;   //hips 13.5
-          tKi = -7.5;   //hips -13.5
-          pi = 18;     //13; //roll agkle kiri
-          pa = 7;     //18; //roll angkle kanan
-          tjKa = -1;   //pitch kanan
-          tjKi = -1;  //pitch kiri
-          gerakinvers(KIRI, times , 0 - 2, 2 + 4, tinggiBadan);
-          gerakinvers(KANAN, times , -6 + 1, 6 + 3, tinggiBadan - 2.5);
+          tKa = 5;//8.5   
+          tKi = 0;//-7.5   
+          pi = 3; //18    
+          pa = 0;//7     
+          tjKa = 10;//-1   
+          tjKi = 0;//-1  
+          gerakinvers(KIRI, times+3 , 0 - 2, 2+3+1 , tinggiBadan);//y = 2+3 
+          gerakinvers(KANAN, times+3 , -6 + 2, 6+4, tinggiBadan - 3);//y = 6+4
           //          //         Serial.println("=========================================Langkah 2===============================================");
           a = 0;
           step = 3;
@@ -501,16 +502,17 @@ void langkahKaInversBaru(double xKakiKiri, double xKakiKanan, double tinggiBadan
           prevte = te;
           walkUpdate(TS * 0.75);
 
-          tPa = -1; //Yaw servo 1
-          tPi = 0; //yaw servo 11
-          tKa = 8;   //15.5 hips
-          tKi = -6;  //-15.5 hips
-          pi = 14;    //20 roll agkle kiri
-          pa = 7;    //9 roll angkle kanan
-          tjKa = -2;   //2pitch kanan
-          tjKi = -1;  //pitch kiri
-          gerakinvers(KIRI, times , -3 - 3  , 5 + 2 , tinggiBadan);
-          gerakinvers(KANAN, times , -2 , 10, tinggiBadan - 2);
+          tb = -5;
+          tPa = -5;//-1 
+          tPi = 0; 
+          tKa = 4;//8   
+          tKi = 0;//-6  
+          pi = 3;//14    
+          pa = 0;//7    
+          tjKa = 10;//-2  
+          tjKi = 0;//-1  
+          gerakinvers(KIRI, times , 0 - 2  ,  3 +2+1, tinggiBadan);
+          gerakinvers(KANAN, times , -2+3 , 6+4, tinggiBadan - 2.5);//y = 10+3
           //          //         Serial.println("AWAL=========================================Langkah 3============================================F======");
           a = 0;
           step = 4;
@@ -539,8 +541,8 @@ void langkahKaInversBaru(double xKakiKiri, double xKakiKanan, double tinggiBadan
           tjKa = 0; //pitch kanan
           tjKi = 0; //pitch kiri
 
-          gerakinvers(KIRI, times + 3, -8 , 0, tinggiBadan); //m+ badan depan
-          gerakinvers(KANAN, times + 3, 0, 0 , tinggiBadan );
+          gerakinvers(KIRI, times+5 , -6 , 0, tinggiBadan);
+          gerakinvers(KANAN, times +5, 0, 0 , tinggiBadan );
           //         Serial.println("AWAL=========================================Langkah 4============================================F======");
           step = 5;
           transmitPulsa(); transmitPulsaXL(); transmitPulsaAX();
@@ -580,6 +582,7 @@ void langkahKaInversBaru(double xKakiKiri, double xKakiKanan, double tinggiBadan
     }
   }
 }
+
 
 void langkahKiInversBaru(double xKakiKiri, double xKakiKanan, double tinggiBadan, double tinggiLangkah, double periodeLangkah)
 {
@@ -627,18 +630,18 @@ void langkahKiInversBaru(double xKakiKiri, double xKakiKanan, double tinggiBadan
           //          GJ3Ki1(times);
           prevte = te;
           walkUpdate(TS * 0.25);
-          //          tjKa = 5;
-          tPa = 0;      //yaw servo 1
-          tPi = 0;      //yaw servo 11
-          tKa = 14;   //hips  servo 2
-          tKi = -11.5;  //hips servo 12
-          pi = 15;     //11.5; //roll agkle kiri servo 16
-          pa = 15;     //11.5; //roll angkle kanan servo 6
-          tjKa = -0.5;   //pitch kanan servo 4
-          tjKi = -2;  //pitch kiri servo 14
+          tb = 0;
+          tPa = 0;      
+          tPi = 0;      
+          tKa = 0; //14  
+          tKi = 0; //-11.5 
+          pi = 0; //15    
+          pa = 0; //15    
+          tjKa = 0;//-0.5  
+          tjKi = 0;//-2  
 
-          gerakinvers(KIRI, times, 3 - 3.06, 0 , tinggiBadan);
-          gerakinvers(KANAN , times , -3 - 3.06 , 0, tinggiBadan);
+          gerakinvers(KANAN, times , 0 , -2 , tinggiBadan);
+          gerakinvers(KIRI , times , -3 - 3.06 , 0, tinggiBadan);
           //         Serial.println("==============================================Langkah 1==================================================");
           a = 0;
           step = 2;
@@ -655,16 +658,17 @@ void langkahKiInversBaru(double xKakiKiri, double xKakiKanan, double tinggiBadan
           prevte = te;
           walkUpdate(TS * 0.5);
 
-          tPa = -1;
-          tPi = 0;
-          tKa = 8.5;   //hips 13.5
-          tKi = -7.5;   //hips -13.5
-          pi = 18;     //13; //roll agkle kiri
-          pa = 7;     //18; //roll angkle kanan
-          tjKa = -1;   //pitch kanan
-          tjKi = -1;  //pitch kiri
-          gerakinvers(KIRI, times + 3 , 3 - 3.06, 0, tinggiBadan);
-          gerakinvers(KANAN, times + 3 , 5.5 - 3.06, 3.2, tinggiBadan - 3.5);
+          tb = -10;
+          tPa = 0;//-1
+          tPi = 3;
+          tKa = 0;//8.5   
+          tKi = 5;//-7.5   
+          pi = 0; //18    
+          pa = -2;//7     
+          tjKa = 0;//-1   
+          tjKi = 10;//-1  
+          gerakinvers(KANAN, times+3 , 0 - 2, -2-3 , tinggiBadan);//y = 2+3 
+          gerakinvers(KIRI, times+3 , -6 + 2, -6-3, tinggiBadan - 3);//y = 6+4
           //          //         Serial.println("=========================================Langkah 2===============================================");
           a = 0;
           step = 3;
@@ -682,16 +686,17 @@ void langkahKiInversBaru(double xKakiKiri, double xKakiKanan, double tinggiBadan
           prevte = te;
           walkUpdate(TS * 0.75);
 
-          tPa = -1; //Yaw servo 1
-          tPi = 0; //yaw servo 11
-          tKa = 8;   //15.5 hips
-          tKi = -6;  //-15.5 hips
-          pi = 14;    //20 roll agkle kiri
-          pa = 7;    //9 roll angkle kanan
-          tjKa = -2;   //2pitch kanan
-          tjKi = -1;  //pitch kiri
-          gerakinvers(KIRI, times + 3, 0  , 0 , tinggiBadan);
-          gerakinvers(KANAN, times + 3, 7 , 2.5, tinggiBadan - 0.7);
+          tb = -7;
+          tPa = 0;//-1 
+          tPi = 6; 
+          tKa = 0;//8   
+          tKi = 4;//-6  
+          pi = 0;//14    
+          pa = -1;//7    
+          tjKa = 0;//-2  
+          tjKi = 10;//-1  
+          gerakinvers(KANAN, times , 0 - 2  ,  -2 -2, tinggiBadan);
+          gerakinvers(KIRI, times , -2+3 , -6-3, tinggiBadan - 2.5);//y = 10+3
           //          //         Serial.println("AWAL=========================================Langkah 3============================================F======");
           a = 0;
           step = 4;
@@ -711,6 +716,7 @@ void langkahKiInversBaru(double xKakiKiri, double xKakiKanan, double tinggiBadan
           prevte = te;
           walkUpdate(TS);
 
+          tb = -3;
           tPa = 0;
           tPi = 0;
           tKa = 0;  //hips
@@ -720,8 +726,8 @@ void langkahKiInversBaru(double xKakiKiri, double xKakiKanan, double tinggiBadan
           tjKa = 0; //pitch kanan
           tjKi = 0; //pitch kiri
 
-          gerakinvers(KIRI, times + 3, -3 , 0, tinggiBadan); //m+ badan depan
-          gerakinvers(KANAN, times + 3, 3, 0 , tinggiBadan - sfZ);
+          gerakinvers(KIRI, times+5 , 0 , 0, tinggiBadan);
+          gerakinvers(KANAN, times +5, -6, 0 , tinggiBadan );
           //         Serial.println("AWAL=========================================Langkah 4============================================F======");
           step = 5;
           transmitPulsa(); transmitPulsaXL(); transmitPulsaAX();
