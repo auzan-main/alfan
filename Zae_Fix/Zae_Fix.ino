@@ -152,6 +152,8 @@ double z1 = 3.52, z2, ztot = 21; //max 23.52 apabila x=0
 double phi = 3.1428571428571430;
 byte F;
 
+double nextGoalPitch, nextGoalRoll_Kanan , nextGoalRoll_Kiri = 0;//sementara taruh sini dulu
+
 #include <Alfan.h>
 
 // ___________________ Prototype Function ________________//
@@ -207,12 +209,6 @@ void setup()
   transmitPulsa();
 
 
-  //  while (digitalRead(17) == 0)
-  //  {
-  //    Serial.println("Belom Jalan Bray");
-  //  }
-  //  BNOsetup();
-
   //              StartZae();  //IKUZOOOOOOOOOOOOOOOO`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   waitAll(1000);
   /*============== arah invers======
@@ -240,6 +236,14 @@ void setup()
   gerakinvers(KANAN, 20, 0, 0, 20);
   gerakinvers(KIRI, 20, -6, 0, 20);
   waitAll(4000);
+  ////////////////////
+//BNOsetup wajib setelah invers awal
+    while (digitalRead(17) == 0)
+    {
+    }
+    BNOsetup();
+    waitAll(1000);
+////////////////////
   ////  ////////////////// Step 1/////////////
   //    gerakinvers(KIRI, 5, 0, 2, 20);
   //    gerakinvers(KANAN, 5, -6, 1, 20);
@@ -272,23 +276,38 @@ void setup()
   //  gerakinvers(KIRI, 5, 2, -10, 17);
   //  gerakinvers(KANAN, 5, 3.5, -5.8, 20);//Y=10, Z=16
   //  waitAll(800);
-  langkahKiInversBaru(-3, 3, 20, 3, 2);
-  waitAll(200);
-  langkahKaInversBaru(-3, 3, 20, 3, 2);
-  waitAll(200);
-  langkahKiInversBaru(-3, 3, 20, 3, 2);
-  waitAll(200);
-  langkahKaInversBaru(-3, 3, 20, 3, 2);
-  waitAll(200);
+//  langkahKiInversBaru(-3, 3, 20, 3, 2);
+//  waitAll(200);
+//  langkahKaInversBaru_nokendali(-3, 3, 20, 3, 2);
+//  waitAll(200);
+//  langkahKiInversBaru(-3, 3, 20, 3, 2);
+//  waitAll(200);
+//  langkahKaInversBaru(-3, 3, 20, 3, 2);
+//  waitAll(200);
 }
 
 void loop()
 {
   //  bacaBNOAwal();
   //  delay(3000);
+//  nokendali();
 }
 
+void nokendali()
+{
+  langkahKiInversBaru_nokendali(-3, 3, 20, 3, 2);
+  waitAll(200);
+  langkahKaInversBaru_nokendali(-3, 3, 20, 3, 2);
+  waitAll(200);
+}
 
+void kendali()
+{
+  langkahKiInversBaru(-3, 3, 20, 3, 2);
+  waitAll(200);
+  langkahKaInversBaru(-3, 3, 20, 3, 2);
+  waitAll(200);
+}
 
 void masker(byte ID, int posisi)
 {
@@ -402,6 +421,391 @@ void tampilsudut() {
 }
 
 
+void langkahKaInversBaru_nokendali(double xKakiKiri, double xKakiKanan, double tinggiBadan, double tinggiLangkah, double periodeLangkah)
+{
+  int in = 0;
+  int count  = 0 , countt = 0 , countTA = 1 , countte = 0;
+  //  int in = 0;
+  unsigned long prevteTA;
+  double a, error, errorx;
+  //  Serial.print("IN : "); Serial.println(indGJ3);
+  footBase = 0;   //0 = kanan sebagai tumpuan
+  step = 0;
+
+  Ts = periodeLangkah;
+  sh = tinggiLangkah;
+  x1 = xKakiKiri;
+  x2 = xKakiKanan;
+  z = tinggiBadan;
+
+  s = x2 - x1;
+
+  TS = Ts * 1000;
+  times = ((Ts + 0.05) * 10 / 4) - 1;
+  tp = millis();
+  tn = tp;
+  prevte = 0;
+  prevteTA = prevte;
+  t = 0;
+  te = 0;
+  //  Serial.print("te : ");Serial.println(te);
+  while (TS + 0.05 >= te)
+  {
+    tp = millis();
+    te = tp - tn;
+    t = te / 1000;
+
+    if (te < TS * 0.25)
+    {
+      //      Serial.println(te);
+      if ((countte == 0 || (te - prevte) >= (TS * 0.25 ))) {
+        if (count == 0) {
+          countte = 1;
+          //          GJ3Ki1(times);
+          prevte = te;
+          walkUpdate(TS * 0.25);
+          bacaBNOAwal();
+          tb = 0;
+          tPa = 0;      
+          tPi = 0;      
+          tKa = 0; //14  
+          tKi = 0; //-11.5 
+          pi = 0; //15    
+          pa = 0; //15    
+          tjKa = 0;//-0.5  
+          tjKi = 0;//-2  
+          pitchKa = 0;
+          pitchKi = 0;
+          gerakinvers(KIRI, times , 0 , 2 , tinggiBadan);
+          gerakinvers(KANAN , times , -3 - 3.06 , 0, tinggiBadan);
+          //         Serial.println("==============================================Langkah 1==================================================");
+          a = 0;
+          step = 2;
+          transmitPulsa(); transmitPulsaXL(); transmitPulsaAX();
+          count++;
+        }
+      }
+    }
+    else if (te < TS * 0.50 && te >= TS * 0.25)
+    {
+      if (((te - prevte) >= (TS * 0.25 ))) {
+        if (count == 1) {
+          //          //         Serial.print("te:" ); //         Serial.println(te);
+          prevte = te;
+          walkUpdate(TS * 0.5);
+          bacaBNO();
+          tb = -7;
+          tPa = -3;//-1
+          tPi = 0;
+          tKa = 5;//8.5   
+          tKi = 0;//-nextGoalRoll_Kanan;//kalo langkahnya kanan yang dikendaliin kaki kiri
+//          tKi = -nextGoalRoll_Kanan;//kalau pakai kendali Roll
+          pi = 3; //18    
+          pa = 0;//7     
+          tjKa = 10;//-1   
+          tjKi = 0;//-1  
+          pitchKa = 0;
+          pitchKi = 0;
+          gerakinvers(KIRI, times+3 , 0 - 2, 2+3+1 , tinggiBadan);//y = 2+3 
+          gerakinvers(KANAN, times+3 , -6 + 2, 6+4, tinggiBadan - 3);//y = 6+4
+          //          //         Serial.println("=========================================Langkah 2===============================================");
+          a = 0;
+          step = 3;
+          transmitPulsa(); transmitPulsaXL(); transmitPulsaAX();
+          count++;
+        }
+      }
+    }
+
+    else if (te < TS * 0.75 && te >= TS * 0.5)
+    {
+      if ((te - prevte) >= (TS * 0.25)) {
+        if (count == 2) {
+          //          //         Serial.print("te:" ); //         Serial.println(te);
+          prevte = te;
+          walkUpdate(TS * 0.75);
+          bacaBNO();
+          tb = -5;
+          tPa = -5;//-1 
+          tPi = 0; 
+          tKa = 4;//8   
+          tKi = 0;//-nextGoalRoll_Kanan;//-6 
+//          tKi = -nextGoalRoll_Kanan;//kalau pakai kendali Roll 
+          pi = 5;//14    
+          pa = 0;//7    
+          tjKa = 5;//-2  
+          tjKi = 0;//-1
+          pitchKa = 0;
+          pitchKi = 0;  
+          gerakinvers(KIRI, times , 0 - 2  ,  3 +2+1, tinggiBadan);
+          gerakinvers(KANAN, times , -2+3 , 6+4, tinggiBadan - 2.5);//y = 10+3
+          //          //         Serial.println("AWAL=========================================Langkah 3============================================F======");
+          a = 0;
+          step = 4;
+          transmitPulsa(); transmitPulsaXL(); transmitPulsaAX();
+          in++;
+          count++ ;
+
+        }
+        //
+      }
+    }
+    else if (te < TS && te >= TS * 0.75)
+    {
+      if (((te - prevte) >= (TS * 0.25 ))) {
+        if ( count == 3) {
+          //          //         Serial.print("te:" ); //         Serial.println(te);
+          prevte = te;
+          walkUpdate(TS);
+
+          tb = -5;
+          tPa = 0;
+          tPi = 0;
+          tKa = 0;  //hips
+          tKi = 0;  //hips
+          pi = 0;   //roll agkle kiri
+          pa = 0;   //roll angkle kanan
+          tjKa = 0; //pitch kanan
+          tjKi = 0; //pitch kiri
+
+          gerakinvers(KIRI, times+5 , -6+1 , 0, tinggiBadan);
+          gerakinvers(KANAN, times +5, 0, 0 , tinggiBadan );
+          //         Serial.println("AWAL=========================================Langkah 4============================================F======");
+          step = 5;
+          transmitPulsa(); transmitPulsaXL(); transmitPulsaAX();
+          count++;
+        }
+      }
+    }
+    //
+    else if (te >= TS)
+    {
+
+      if (((te - prevte + 8) >= (TS * 0.25 ))) {
+        if (count == 4) {
+          //          GJ3Ki1(times);
+        }
+        prevte = te;
+        walkUpdate(te);
+
+        langkah = KIRI;
+        tumpuan = KANAN;
+        //        tjKa = 0;
+        tjKi = 0;
+        tPa = 0;
+        tPi = 0;
+        tKa = 0;
+        tKi = 0;
+        pi = 0;
+        pa = 0;
+
+      }
+    }
+
+
+
+    if (count == 4) {
+      count = 0;
+    }
+  }
+}
+
+
+void langkahKiInversBaru_nokendali(double xKakiKiri, double xKakiKanan, double tinggiBadan, double tinggiLangkah, double periodeLangkah)
+{
+  int in = 0;
+  int count  = 0 , countt = 0 , countTA = 1 , countte = 0;
+  //  int in = 0;
+  unsigned long prevteTA;
+  double a, error, errorx;
+  //  Serial.print("IN : "); Serial.println(indGJ3);
+  footBase = 0;   //0 = kanan sebagai tumpuan
+  step = 0;
+
+  Ts = periodeLangkah;
+  sh = tinggiLangkah;
+  x1 = xKakiKiri;
+  x2 = xKakiKanan;
+  z = tinggiBadan;
+
+  s = x2 - x1;
+
+  TS = Ts * 1000;
+  times = ((Ts + 0.05) * 10 / 4) - 1;
+  tp = millis();
+  tn = tp;
+  prevte = 0;
+  prevteTA = prevte;
+  t = 0;
+  te = 0;
+  //  kordinatLangkahKi();
+  //  walkInitGJ3();
+  walkInitGJ3Belok(3, -3, 4.5, 4.5);
+  //  Serial.print("te : ");Serial.println(te);
+  while (TS + 0.05 >= te)
+  {
+    tp = millis();
+    te = tp - tn;
+    t = te / 1000;
+
+    if (te < TS * 0.25)
+    {
+      //      Serial.println(te);
+      if ((countte == 0 || (te - prevte) >= (TS * 0.25 ))) {
+        if (count == 0) {
+          countte = 1;
+          //          GJ3Ki1(times);
+          prevte = te;
+          walkUpdate(TS * 0.25);
+          bacaBNOAwal();
+          tb = 0;
+          tPa = 0;      
+          tPi = 0;      
+          tKa = 0; //14  
+          tKi = 0; //-11.5 
+          pi = 0; //15    
+          pa = 0; //15    
+          tjKa = 0;//-0.5  
+          tjKi = 0;//-2  
+          pitchKa = 0;
+          pitchKi = 0;
+          gerakinvers(KANAN, times , 0 , -2 , tinggiBadan);
+          gerakinvers(KIRI , times , -3 - 3.06 , 0, tinggiBadan);
+          //         Serial.println("==============================================Langkah 1==================================================");
+          a = 0;
+          step = 2;
+          transmitPulsa(); transmitPulsaXL(); transmitPulsaAX();
+          count++;
+        }
+      }
+    }
+    else if (te < TS * 0.50 && te >= TS * 0.25)
+    {
+      if (((te - prevte) >= (TS * 0.25 ))) {
+        if (count == 1) {
+          //          //         Serial.print("te:" ); //         Serial.println(te);
+          prevte = te;
+          walkUpdate(TS * 0.5);
+          bacaBNO();
+          tb = -10;
+          tPa = 0;//-1
+          tPi = 3;
+          tKa = 0;//-nextGoalRoll_Kiri;//Kalo langkah kiri berarti yang dikendaliin kaki kanan
+//          tKa = -nextGoalRoll_Kiri;//untuk kendali roll kiri
+          tKi = 5;//-7.5   
+          pi = 0; //18    
+          pa = -2;//7     
+          tjKa = 0;//-1   
+          tjKi = 10;//-1 
+          pitchKa = 0;
+          pitchKi = 0; 
+          gerakinvers(KANAN, times+3 , 0 - 2, -2-3 , tinggiBadan);//y = 2+3 
+          gerakinvers(KIRI, times+3 , -6 + 2, -6-3, tinggiBadan - 3);//y = 6+4
+          //          //         Serial.println("=========================================Langkah 2===============================================");
+          a = 0;
+          step = 3;
+          transmitPulsa(); transmitPulsaXL(); transmitPulsaAX();
+          count++;
+        }
+      }
+    }
+
+    else if (te < TS * 0.75 && te >= TS * 0.5)
+    {
+      if ((te - prevte) >= (TS * 0.25)) {
+        if (count == 2) {
+          //          //         Serial.print("te:" ); //         Serial.println(te);
+          prevte = te;
+          walkUpdate(TS * 0.75);
+          bacaBNO();
+          tb = -7;
+          tPa = 0;//-1 
+          tPi = 6; 
+          tKa = 0;//-nextGoalRoll_Kiri;//8   
+//          tKa = -nextGoalRoll_Kiri;//untuk kendali roll kiri
+          tKi = 4;//-6  
+          pi = 0;//14    
+          pa = -1;//7    
+          tjKa = 0;//-2  
+          tjKi = 10;//-1  
+          pitchKa = 0;
+          pitchKi = 0;
+          gerakinvers(KANAN, times , 0 - 2  ,  -2 -2, tinggiBadan);
+          gerakinvers(KIRI, times , -2+3 , -6-3, tinggiBadan - 2.5);//y = 10+3
+          //          //         Serial.println("AWAL=========================================Langkah 3============================================F======");
+          a = 0;
+          step = 4;
+          transmitPulsa(); transmitPulsaXL(); transmitPulsaAX();
+          in++;
+          count++ ;
+
+        }
+        //
+      }
+    }
+    else if (te < TS && te >= TS * 0.75)
+    {
+      if (((te - prevte) >= (TS * 0.25 ))) {
+        if ( count == 3) {
+          //          //         Serial.print("te:" ); //         Serial.println(te);
+          prevte = te;
+          walkUpdate(TS);
+
+          tb = -3;
+          tPa = 0;
+          tPi = 0;
+          tKa = 0;  //hips
+          tKi = 0;  //hips
+          pi = 0;   //roll agkle kiri
+          pa = 0;   //roll angkle kanan
+          tjKa = 0; //pitch kanan
+          tjKi = 0; //pitch kiri
+          pitchKa = 0;
+          pitchKi = 0;
+          gerakinvers(KIRI, times+5 , 0 , 0, tinggiBadan);
+          gerakinvers(KANAN, times +5, -6, 0 , tinggiBadan );
+          //         Serial.println("AWAL=========================================Langkah 4============================================F======");
+          step = 5;
+          transmitPulsa(); transmitPulsaXL(); transmitPulsaAX();
+          count++;
+        }
+      }
+    }
+    //
+    else if (te >= TS)
+    {
+
+      if (((te - prevte + 8) >= (TS * 0.25 ))) {
+        if (count == 4) {
+          //          GJ3Ki1(times);
+        }
+        prevte = te;
+        walkUpdate(te);
+
+        langkah = KIRI;
+        tumpuan = KANAN;
+        //        tjKa = 0;
+        tjKi = 0;
+        tPa = 0;
+        tPi = 0;
+        tKa = 0;
+        tKi = 0;
+        pi = 0;
+        pa = 0;
+
+      }
+    }
+
+
+
+    if (count == 4) {
+      count = 0;
+    }
+  }
+
+}
+
+
 void langkahKaInversBaru(double xKakiKiri, double xKakiKanan, double tinggiBadan, double tinggiLangkah, double periodeLangkah)
 {
   int in = 0;
@@ -445,7 +849,7 @@ void langkahKaInversBaru(double xKakiKiri, double xKakiKanan, double tinggiBadan
           //          GJ3Ki1(times);
           prevte = te;
           walkUpdate(TS * 0.25);
-
+          bacaBNOAwal();
           tb = 0;
           tPa = 0;      
           tPi = 0;      
@@ -455,7 +859,8 @@ void langkahKaInversBaru(double xKakiKiri, double xKakiKanan, double tinggiBadan
           pa = 0; //15    
           tjKa = 0;//-0.5  
           tjKi = 0;//-2  
-
+          pitchKa = 0;
+          pitchKi = 0;
           gerakinvers(KIRI, times , 0 , 2 , tinggiBadan);
           gerakinvers(KANAN , times , -3 - 3.06 , 0, tinggiBadan);
           //         Serial.println("==============================================Langkah 1==================================================");
@@ -473,16 +878,19 @@ void langkahKaInversBaru(double xKakiKiri, double xKakiKanan, double tinggiBadan
           //          //         Serial.print("te:" ); //         Serial.println(te);
           prevte = te;
           walkUpdate(TS * 0.5);
-
+          bacaBNO();
           tb = -7;
           tPa = -3;//-1
           tPi = 0;
           tKa = 5;//8.5   
-          tKi = 0;//-7.5   
+//          tKi = 0;//-nextGoalRoll_Kanan;//kalo langkahnya kanan yang dikendaliin kaki kiri
+          tKi = -nextGoalRoll_Kanan;//kalau pakai kendali Roll
           pi = 3; //18    
           pa = 0;//7     
           tjKa = 10;//-1   
           tjKi = 0;//-1  
+          pitchKa = 0;
+          pitchKi = -nextGoalPitch;
           gerakinvers(KIRI, times+3 , 0 - 2, 2+3+1 , tinggiBadan);//y = 2+3 
           gerakinvers(KANAN, times+3 , -6 + 2, 6+4, tinggiBadan - 3);//y = 6+4
           //          //         Serial.println("=========================================Langkah 2===============================================");
@@ -501,16 +909,19 @@ void langkahKaInversBaru(double xKakiKiri, double xKakiKanan, double tinggiBadan
           //          //         Serial.print("te:" ); //         Serial.println(te);
           prevte = te;
           walkUpdate(TS * 0.75);
-
+          bacaBNO();
           tb = -5;
           tPa = -5;//-1 
           tPi = 0; 
           tKa = 4;//8   
-          tKi = 0;//-6  
-          pi = 3;//14    
+//          tKi = 0;//-nextGoalRoll_Kanan;//-6 
+          tKi = -nextGoalRoll_Kanan;//kalau pakai kendali Roll 
+          pi = 5;//14    
           pa = 0;//7    
-          tjKa = 10;//-2  
-          tjKi = 0;//-1  
+          tjKa = 5;//-2  
+          tjKi = 0;//-1
+          pitchKa = 0;
+          pitchKi = -nextGoalPitch;  
           gerakinvers(KIRI, times , 0 - 2  ,  3 +2+1, tinggiBadan);
           gerakinvers(KANAN, times , -2+3 , 6+4, tinggiBadan - 2.5);//y = 10+3
           //          //         Serial.println("AWAL=========================================Langkah 3============================================F======");
@@ -532,6 +943,7 @@ void langkahKaInversBaru(double xKakiKiri, double xKakiKanan, double tinggiBadan
           prevte = te;
           walkUpdate(TS);
 
+          tb = -5;
           tPa = 0;
           tPi = 0;
           tKa = 0;  //hips
@@ -541,7 +953,7 @@ void langkahKaInversBaru(double xKakiKiri, double xKakiKanan, double tinggiBadan
           tjKa = 0; //pitch kanan
           tjKi = 0; //pitch kiri
 
-          gerakinvers(KIRI, times+5 , -6 , 0, tinggiBadan);
+          gerakinvers(KIRI, times+5 , -6+1 , 0, tinggiBadan);
           gerakinvers(KANAN, times +5, 0, 0 , tinggiBadan );
           //         Serial.println("AWAL=========================================Langkah 4============================================F======");
           step = 5;
@@ -630,6 +1042,7 @@ void langkahKiInversBaru(double xKakiKiri, double xKakiKanan, double tinggiBadan
           //          GJ3Ki1(times);
           prevte = te;
           walkUpdate(TS * 0.25);
+          bacaBNOAwal();
           tb = 0;
           tPa = 0;      
           tPi = 0;      
@@ -639,7 +1052,8 @@ void langkahKiInversBaru(double xKakiKiri, double xKakiKanan, double tinggiBadan
           pa = 0; //15    
           tjKa = 0;//-0.5  
           tjKi = 0;//-2  
-
+          pitchKa = 0;
+          pitchKi = 0;
           gerakinvers(KANAN, times , 0 , -2 , tinggiBadan);
           gerakinvers(KIRI , times , -3 - 3.06 , 0, tinggiBadan);
           //         Serial.println("==============================================Langkah 1==================================================");
@@ -657,16 +1071,19 @@ void langkahKiInversBaru(double xKakiKiri, double xKakiKanan, double tinggiBadan
           //          //         Serial.print("te:" ); //         Serial.println(te);
           prevte = te;
           walkUpdate(TS * 0.5);
-
+          bacaBNO();
           tb = -10;
           tPa = 0;//-1
           tPi = 3;
-          tKa = 0;//8.5   
+//          tKa = 0;//-nextGoalRoll_Kiri;//Kalo langkah kiri berarti yang dikendaliin kaki kanan
+          tKa = -nextGoalRoll_Kiri;//untuk kendali roll kiri
           tKi = 5;//-7.5   
           pi = 0; //18    
           pa = -2;//7     
           tjKa = 0;//-1   
-          tjKi = 10;//-1  
+          tjKi = 10;//-1 
+          pitchKa = -nextGoalPitch;
+          pitchKi = 0; 
           gerakinvers(KANAN, times+3 , 0 - 2, -2-3 , tinggiBadan);//y = 2+3 
           gerakinvers(KIRI, times+3 , -6 + 2, -6-3, tinggiBadan - 3);//y = 6+4
           //          //         Serial.println("=========================================Langkah 2===============================================");
@@ -685,16 +1102,19 @@ void langkahKiInversBaru(double xKakiKiri, double xKakiKanan, double tinggiBadan
           //          //         Serial.print("te:" ); //         Serial.println(te);
           prevte = te;
           walkUpdate(TS * 0.75);
-
+          bacaBNO();
           tb = -7;
           tPa = 0;//-1 
           tPi = 6; 
-          tKa = 0;//8   
+//          tKa = 0;//-nextGoalRoll_Kiri;//8   
+          tKa = -nextGoalRoll_Kiri;//untuk kendali roll kiri
           tKi = 4;//-6  
           pi = 0;//14    
           pa = -1;//7    
           tjKa = 0;//-2  
           tjKi = 10;//-1  
+          pitchKa = -nextGoalPitch;
+          pitchKi = 0;
           gerakinvers(KANAN, times , 0 - 2  ,  -2 -2, tinggiBadan);
           gerakinvers(KIRI, times , -2+3 , -6-3, tinggiBadan - 2.5);//y = 10+3
           //          //         Serial.println("AWAL=========================================Langkah 3============================================F======");
@@ -725,7 +1145,8 @@ void langkahKiInversBaru(double xKakiKiri, double xKakiKanan, double tinggiBadan
           pa = 0;   //roll angkle kanan
           tjKa = 0; //pitch kanan
           tjKi = 0; //pitch kiri
-
+          pitchKa = 0;
+          pitchKi = 0;
           gerakinvers(KIRI, times+5 , 0 , 0, tinggiBadan);
           gerakinvers(KANAN, times +5, -6, 0 , tinggiBadan );
           //         Serial.println("AWAL=========================================Langkah 4============================================F======");
